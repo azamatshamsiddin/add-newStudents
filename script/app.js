@@ -1,60 +1,89 @@
+// ==== Form selector
 const form = document.querySelector(".form");
-// const formInputs = document.querySelector(".form-input");
-const inputAge = document.querySelector(".age");
-const inputFirstName = document.querySelector(".firstName");
-const inputLastName = document.querySelector(".lastName");
-const formBtn = document.querySelector(".form-btn");
-const formSelect = document.querySelector(".form-select");
-
-// const tr = document.querySelector("tr");
+// ==== Inputs
+const firstName = document.querySelector(".firstName");
+const lastName = document.querySelector(".lastName");
+const age = document.querySelector(".age");
+// ==== Submit button
+const btnAdd = document.querySelector(".btn-success");
+const btnReset = document.querySelector(".btn-danger");
+// ==== Select button
+const select = document.querySelector(".form-select");
+// ==== tbody tag of table
 const tbody = document.querySelector(".tbody");
 
-const data = [];
-function renderArr() {
-  let prev = data[data.length - 1];
+document.addEventListener("DOMContentLoaded", () => {
+  let studentList;
 
-  let tr = document.createElement("tr");
-  let td1 = document.createElement("td");
-  let td2 = document.createElement("td");
-  let td3 = document.createElement("td");
-  let td4 = document.createElement("td");
-  td1.textContent = prev.firstName;
-  td2.textContent = prev.lastName;
-  td3.textContent = prev.age;
-  td4.textContent = prev.course;
-  tr.appendChild(td1);
-  tr.appendChild(td2);
-  tr.appendChild(td3);
-  tr.appendChild(td4);
-  tbody.appendChild(tr);
-}
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  renderArr();
-  inputFirstName.value = "";
-  inputLastName.value = "";
-  inputAge.value = "";
-});
-
-function getVal(val) {
-  let obj = {};
-  obj.id = data.length + 1;
-  obj.firstName = inputFirstName.value;
-  obj.lastName = inputLastName.value;
-  obj.age = +inputAge.value;
-  obj.course = val;
-
-  for (let key in obj) {
-    if (obj[key] === "") {
-      return;
-    } else {
-      data.push(obj);
-    }
+  if (localStorage.getItem("studentList")) {
+    studentList = JSON.parse(localStorage.getItem("studentList"));
+  } else {
+    studentList = [];
   }
-  console.log(obj);
-}
-formSelect.addEventListener("change", (e) => {
-  let val = e.target.value;
-  getVal(val);
+  drawerStudentList(studentList);
+
+  function drawerStudentList(array) {
+    tbody.innerHTML = "";
+
+    array.forEach((item, index) => {
+      tbody.innerHTML += `
+      <tr class="">
+        <th scope="row" class="text-center">${index + 1}</th>
+        <td>${item.firstName}</td>
+        <td>${item.lastName}</td>
+        <td class="text-center">${item.age}</td>
+        <td class="text-center">${item.select}</td>
+      </tr>
+      `;
+    });
+  }
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (
+      firstName.value !== "" &&
+      lastName.value !== "" &&
+      age.value !== "" &&
+      select.value !== ""
+    ) {
+      const newStudent = {
+        firstName: firstName.value,
+        lastName: lastName.value,
+        age: age.value,
+        select: select.value,
+      };
+
+      studentList.push(newStudent);
+      drawerStudentList(studentList);
+      e.target.reset();
+      alert("A new student was added ✅");
+
+      localStorage.setItem("studentList", JSON.stringify(studentList));
+    } else {
+      alert("Please fill in the blanks ❗");
+    }
+  });
+  btnReset.addEventListener("click", () => {
+    window.localStorage.clear();
+    studentList = [];
+    drawerStudentList(studentList);
+  });
+
+  // Search section
+  // const search = document.querySelector(".search");
+  // const regex = new RegExp(search.value, "gi");
+  // const btnSearch = document.querySelector(".btn-search");
+  // btnSearch.addEventListener("click", () => {
+  //   studentList.forEach((item) => {
+  //     if (item.firstName.match(regex)) {
+  //       tbody.textContent = "";
+  //       studentList.push(item);
+  //       drawerStudentList(studentList);
+  //       console.log(item);
+  //     } else {
+  //       studentList = [];
+  //     }
+  //   });
+  // });
 });
