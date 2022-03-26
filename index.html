@@ -15,6 +15,26 @@
   <body>
     <h1 class="text-center mt-3">List of new students</h1>
     <form class="form" name="form">
+      <div
+        class="container col-8 d-flex align-items-center justify-content-between mt-5"
+      >
+        <input
+          class="form-input form-control search"
+          type="text"
+          placeholder="Search..."
+        />
+        <select class="form-select mx-3 filter w-25" name="filter" id="filter">
+          <option value="unsorted" selected disabled>Unsorted</option>
+          <option value="old-young">Older => younger</option>
+          <option value="young-old">Younger => older</option>
+        </select>
+        <button
+          class="search-btn btn btn-outline-primary align-items-end"
+          type="button"
+        >
+          Find
+        </button>
+      </div>
       <div class="container col-8 d-flex align-items-center mt-5">
         <input
           class="form-input form-control firstName mx-2"
@@ -33,7 +53,7 @@
           type="number"
           placeholder="Age"
         />
-        <select class="form-select mx-2" name="formSelect">
+        <select class="form-select group mx-2" name="formSelect">
           <optgroup label="IT">
             <option class="form-select__option" selected disabled value="">
               ...
@@ -41,15 +61,11 @@
             <option class="form-select__option" value="Graphic Design">
               Graphic Design
             </option>
-            <option class="form-select__option" value="Frontend Dev">
-              Frontend Dev
+            <option class="form-select__option" value="Frontend">
+              Frontend
             </option>
-            <option class="form-select__option" value="Backend Dev">
-              Backend Dev
-            </option>
-            <option class="form-select__option" value="Mobile Dev">
-              Mobile Dev
-            </option>
+            <option class="form-select__option" value="Backend">Backend</option>
+            <option class="form-select__option" value="Mobile dev">Mobile dev</option>
           </optgroup>
         </select>
         <button class="form-btn btn btn-success" type="submit">Add</button>
@@ -73,6 +89,7 @@
         <tbody class="tbody"></tbody>
       </table>
     </div>
+    <script src="./script/data.js"></script>
     <script src="./script/app.js"></script>
     <!-- <script src="./script/index.js"></script> -->
   </body>

@@ -1,24 +1,27 @@
 // ==== Form selector
 const form = document.querySelector(".form");
 // ==== Inputs
+const search = document.querySelector(".search");
 const firstName = document.querySelector(".firstName");
 const lastName = document.querySelector(".lastName");
 const age = document.querySelector(".age");
 // ==== Submit button
 const btnAdd = document.querySelector(".btn-success");
 const btnReset = document.querySelector(".btn-danger");
+const btnSearch = document.querySelector(".btn-outline-primary");
 // ==== Select button
-const select = document.querySelector(".form-select");
+const group = document.querySelector(".group");
+const filter = document.querySelector(".filter");
 // ==== tbody tag of table
 const tbody = document.querySelector(".tbody");
 
 document.addEventListener("DOMContentLoaded", () => {
-  let studentList;
+  let studentList = students;
 
   if (localStorage.getItem("studentList")) {
     studentList = JSON.parse(localStorage.getItem("studentList"));
   } else {
-    studentList = [];
+    studentList = students;
   }
   drawerStudentList(studentList);
 
@@ -32,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
         <td>${item.firstName}</td>
         <td>${item.lastName}</td>
         <td class="text-center">${item.age}</td>
-        <td class="text-center">${item.select}</td>
+        <td class="text-center">${item.group}</td>
       </tr>
       `;
     });
@@ -45,13 +48,13 @@ document.addEventListener("DOMContentLoaded", () => {
       firstName.value !== "" &&
       lastName.value !== "" &&
       age.value !== "" &&
-      select.value !== ""
+      group.value !== ""
     ) {
       const newStudent = {
         firstName: firstName.value,
         lastName: lastName.value,
         age: age.value,
-        select: select.value,
+        group: group.value,
       };
 
       studentList.push(newStudent);
@@ -64,26 +67,35 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("Please fill in the blanks ❗");
     }
   });
+  // Search student with name
+  btnSearch.addEventListener("click", () => {
+    const regex = new RegExp(search.value, "gi");
+    let searchedStudent = [];
+    studentList.map((item) => {
+      if (item.firstName.match(regex)) {
+        searchedStudent.push(item);
+      }
+    });
+    drawerStudentList(searchedStudent);
+  });
+
+  // filter with students age
+  filter.addEventListener("change", (e) => {
+    let filterValue = e.target.value;
+    if (filterValue === "unsorted") {
+      studentList;
+    } else if (filterValue === "young-old") {
+      studentList.sort((a, b) => a.age - b.age);
+    } else if (filterValue === "old-young") {
+      studentList.sort((a, b) => b.age - a.age);
+    } else {
+      studentList;
+    }
+  });
+
   btnReset.addEventListener("click", () => {
     window.localStorage.clear();
     studentList = [];
     drawerStudentList(studentList);
   });
-
-  // Search section
-  // const search = document.querySelector(".search");
-  // const regex = new RegExp(search.value, "gi");
-  // const btnSearch = document.querySelector(".btn-search");
-  // btnSearch.addEventListener("click", () => {
-  //   studentList.forEach((item) => {
-  //     if (item.firstName.match(regex)) {
-  //       tbody.textContent = "";
-  //       studentList.push(item);
-  //       drawerStudentList(studentList);
-  //       console.log(item);
-  //     } else {
-  //       studentList = [];
-  //     }
-  //   });
-  // });
 });
